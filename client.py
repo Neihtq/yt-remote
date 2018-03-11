@@ -1,24 +1,27 @@
-import socket
-import sys
+import socket, sys, struct
+from time import sleep
 
-sock = socket.create_connection(('localhost', 8081))
+def packSize(msg):
+    size = struct.pack('!I', len(msg))
+    return size
 
-url = sys.argv[1]
+def connectAndSend(msg):
+    sock = socket.create_connection(('localhost', 8800))
+    try:        
+        size = packSize(msg)
+        sock.send(size)
+        sock.send(msg)
 
-try:
-    message = url.encode()
-    print('sending {!r}'.format(message))
-    sock.sendall(message)
+        size = sock.recv(4)
+        size = struct.unpack('!I', size)[0]        
+        data = sock.recv(size).decode()
+        print("Now playing: " + data)
 
-    amount_received = 0
-    amount_expected = len(message)
+    finally:
+        print('closing socket')
+        sock.close()
 
-    while amount_received < amount_expected:
-        data = sock.recv(43)
-        amount_received += len(data)
-        txt = data.decode()
-        print(txt)
 
-finally:
-    print('closing socket')
-    sock.close()
+url = "https://www.youtube.com/watch?v=wuGt8wanfhE" # Anevo- Waiting on your call
+message = url.encode()
+connectAndSend(message)
