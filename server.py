@@ -2,29 +2,36 @@ from  _thread import start_new_thread
 from time import sleep
 import socket, sys, pafy, os, vlc, struct, traceback
 
-
-def _play(track, dur):
-    global duration
-    sleep(dur)
-    media = instance.media_new(track)
-    player.set_media(media)
-    player.play()
-    sleep(1)
-    duration = player.get_length()
-    print(duration)
-
 def packSize(msg):
     size = struct.pack('!I', len(msg))
     return size
 
 def playYT(url):
-
     print("creating video object")
     video = pafy.new(url)
     title = video.title
     track = video.getbestaudio()
-    print(duration)
-    start_new_thread(_play,(track.url, duration))
+
+def runVLC():
+    instance = vlc.Instance('--input-repeat=-1')
+    for song in song_list:
+        player=instance.media_player_new()
+        media=instance.media_new(song)
+
+        media.get_mrl()
+        player.set_media(media)
+        player.play()
+        playing = set([1,2,3,4])
+        time.sleep(1)
+        duration = player.get_length() / 1000
+        mm, ss = divmod(duration, 60)
+
+        while True:
+            state = player.get_state()
+            if state not in playing:
+                break
+            continue
+
 
 
 def createSocket(host):
