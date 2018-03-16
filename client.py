@@ -1,12 +1,14 @@
 import socket, sys, struct
 from time import sleep
 
+PORT = 8000
+
 def packSize(msg):
     size = struct.pack('!I', len(msg))
     return size
 
 def connectAndSend(msg):
-    sock = socket.create_connection(('localhost', 8800))
+    sock = socket.create_connection(('localhost', PORT))
     try:        
         size = packSize(msg)
         sock.send(size)
@@ -22,6 +24,6 @@ def connectAndSend(msg):
         sock.close()
 
 
-url = "https://www.youtube.com/watch?v=wuGt8wanfhE" # Anevo- Waiting on your call
+url = "https://www.youtube.com/watch?v=mkgl_f-DpXc" # Anevo- Waiting on your call
 message = url.encode()
 connectAndSend(message)
