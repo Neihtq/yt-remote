@@ -1,5 +1,4 @@
 import socket, sys, struct
-from time import sleep
 
 PORT = 8000
 

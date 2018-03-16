@@ -3,8 +3,22 @@ from threading import Thread
 from time import sleep
 import socket, sys, pafy, os, vlc, struct, traceback
 
-PORT = 8000
 _host = 'localhost'
+
+def currentlyPlaying(sock):
+    while True:
+        connection, client_address = sock.accept()
+        try:
+            print('client asking for status: ', client_address)
+            msg = currplaying.encode()
+            size = packSize(msg)
+            connection.send(size)
+            connection.send(msg)
+            print("sent status")
+
+        finally:
+            connection.close()
+
 
 def packSize(msg):
     size = struct.pack('!I', len(msg))
@@ -17,21 +31,23 @@ def playYT(url):
     video = pafy.new(url)
     title = video.title
     track = video.getbestaudio()
-    trackList.append(track.url)
+    trackList.append((track.url, title))
 
 def runVLC():
+    global currplaying
     global trackList
     instance = vlc.Instance('--input-repeat=-1')
     player = instance.media_player_new()
     
     for song in trackList:
-        player=instance.media_player_new()
-        media=instance.media_new(song)
+        currplaying = song[1]
+        media=instance.media_new(song[0])
 
         media.get_mrl()
         player.set_media(media)
         player.play()
         playing = set([1,2,3,4])
+        
         sleep(1)
 
         trackList.remove(song)
@@ -42,10 +58,10 @@ def runVLC():
                 break
             continue
 
-def createSocket(host):
+def createSocket(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_name = socket.gethostbyname(host)
-    server_address = (server_name, PORT)
+    server_name = socket.gethostbyname(_host)
+    server_address = (server_name, port)
     print('starting up on {} port {}'.format(*server_address))
     sock.bind(server_address)
     sock.listen(5)
@@ -74,14 +90,17 @@ def slisten(sock):
             connection.close()
 
 
-serversocket = createSocket(_host)
+serversocket = createSocket(8000)
+statusSocket = createSocket(8020)
 trackList = []
 isempty = True
+currplaying= "Nothing"
+
 
 #start_new_thread(slisten, (serversocket,))
 t2 = Thread(target=runVLC)
 start_new_thread(slisten,(serversocket,))
-
+start_new_thread(currentlyPlaying,(statusSocket,))
 while True:
     if not trackList:
         continue
