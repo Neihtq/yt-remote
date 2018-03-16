@@ -1,6 +1,6 @@
 import socket, sys, struct
 
-PORT = 8000
+PORT = 8001
 
 def packSize(msg):
     size = struct.pack('!I', len(msg))
@@ -24,5 +24,6 @@ def connectAndSend(msg):
 
 
 url = "https://www.youtube.com/watch?v=mkgl_f-DpXc" # Anevo- Waiting on your call
+url = "https://soundcloud.com/marshmellomusic/friends"
 message = url.encode()
 connectAndSend(message)

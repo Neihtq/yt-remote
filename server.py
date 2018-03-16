@@ -4,6 +4,7 @@ from time import sleep
 import socket, sys, pafy, os, vlc, struct, traceback
 
 _host = 'localhost'
+txt = "Can't read title from soundcloud"
 
 def currentlyPlaying(sock):
     while True:
@@ -24,14 +25,23 @@ def packSize(msg):
     size = struct.pack('!I', len(msg))
     return size
 
-def playYT(url):
-    global player
+def addSong(url):
     global trackList
-    print("creating video object")
-    video = pafy.new(url)
-    title = video.title
-    track = video.getbestaudio()
-    trackList.append((track.url, title))
+    title = txt
+    if "youtube" in url:
+        video = pafy.new(url)
+        title = video.title
+    trackList.append((url, title))
+
+def runVLC2():
+    global currplaying
+    global trackList
+    playlist = ""
+    for track in trackList:
+        playlist += track[0] + " "
+        currplaying = track[1]
+        trackList.remove(track)
+    os.system("cvlc --novideo --play-and-exit " + playlist)
 
 def runVLC():
     global currplaying
@@ -79,10 +89,13 @@ def slisten(sock):
             print("received: " + str(data))
 
             url = data.decode()
-            title = pafy.new(url).title.encode()
+            title = txt
+            if "youtube" in url:
+                title = pafy.new(url).title
             size = packSize(title)
             print("launch playYT")
-            playYT(url)
+            addSong(url)
+            title = title.encode()
             connection.send(size)
             connection.send(title)
         
@@ -90,18 +103,18 @@ def slisten(sock):
             connection.close()
 
 
-serversocket = createSocket(8000)
+serversocket = createSocket(8001)
 statusSocket = createSocket(8020)
 trackList = []
 isempty = True
 currplaying= "Nothing"
 
 
-#start_new_thread(slisten, (serversocket,))
-t2 = Thread(target=runVLC)
+t2 = Thread(target=runVLC2)
 start_new_thread(slisten,(serversocket,))
 start_new_thread(currentlyPlaying,(statusSocket,))
 while True:
     if not trackList:
+        currplaying = "Nothing"
         continue
-    runVLC()
+    runVLC2()
