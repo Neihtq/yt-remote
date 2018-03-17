@@ -1,7 +1,7 @@
 from  _thread import start_new_thread
 from threading import Thread
 from time import sleep
-import socket, sys, pafy, os, vlc, struct, traceback
+import socket, sys, pafy, os, struct, traceback
 
 _host = 'localhost'
 txt = "Can't read title from soundcloud"
@@ -25,6 +25,7 @@ def packSize(msg):
     size = struct.pack('!I', len(msg))
     return size
 
+
 def addSong(url):
     global trackList
     title = txt
@@ -33,7 +34,8 @@ def addSong(url):
         title = video.title
     trackList.append((url, title))
 
-def runVLC2():
+
+def runVLC():
     global currplaying
     global trackList
     playlist = ""
@@ -43,30 +45,6 @@ def runVLC2():
         trackList.remove(track)
     os.system("cvlc --novideo --play-and-exit " + playlist)
 
-def runVLC():
-    global currplaying
-    global trackList
-    instance = vlc.Instance('--input-repeat=-1')
-    player = instance.media_player_new()
-    
-    for song in trackList:
-        currplaying = song[1]
-        media=instance.media_new(song[0])
-
-        media.get_mrl()
-        player.set_media(media)
-        player.play()
-        playing = set([1,2,3,4])
-        
-        sleep(1)
-
-        trackList.remove(song)
-
-        while True:
-            state = player.get_state()
-            if state not in playing:
-                break
-            continue
 
 def createSocket(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -106,15 +84,12 @@ def slisten(sock):
 serversocket = createSocket(8001)
 statusSocket = createSocket(8020)
 trackList = []
-isempty = True
 currplaying= "Nothing"
 
-
-t2 = Thread(target=runVLC2)
 start_new_thread(slisten,(serversocket,))
 start_new_thread(currentlyPlaying,(statusSocket,))
 while True:
     if not trackList:
         currplaying = "Nothing"
         continue
-    runVLC2()
+    runVLC()
