@@ -1,13 +1,13 @@
 import socket, sys, struct
 
 PORT = 8001
-
+HOST = '192.168.2.206'
 def packSize(msg):
     size = struct.pack('!I', len(msg))
     return size
 
 def connectAndSend(msg):
-    sock = socket.create_connection(('localhost', PORT))
+    sock = socket.create_connection((HOST, PORT))
     try:        
         size = packSize(msg)
         sock.send(size)
