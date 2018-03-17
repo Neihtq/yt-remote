@@ -1,10 +1,24 @@
 from  _thread import start_new_thread
 from threading import Thread
 from time import sleep
-import socket, sys, pafy, os, struct, traceback
+import socket, sys, pafy, os, struct, traceback, pickle
 
 _host = 'localhost'
 txt = "Can't read title from soundcloud"
+
+def sendQueue(sock):
+    while True:
+        connection, client_address = sock.accept()
+        try:
+            data = pickle.dumps(trackList)
+            size = packSize(data)
+            connection.send(size)
+            connection.send(data)
+            print("sent status")
+        
+        finally:
+            connection.close()
+
 
 def currentlyPlaying(sock):
     while True:
@@ -83,11 +97,23 @@ def slisten(sock):
 
 serversocket = createSocket(8001)
 statusSocket = createSocket(8020)
+queueSocket = createSocket(8002)
 trackList = []
 currplaying= "Nothing"
 
-start_new_thread(slisten,(serversocket,))
-start_new_thread(currentlyPlaying,(statusSocket,))
+print("slisten")
+threadL = Thread(target=slisten, args=(serversocket,))
+threadL.start()
+
+print("currPlaying")
+threadS = Thread(target=currentlyPlaying, args=(statusSocket,))
+threadS.start()
+
+print("Queue")
+threadQ = Thread(target=sendQueue, args=(queueSocket,))
+threadQ.start()
+
+print("Enter while loop")
 while True:
     if not trackList:
         currplaying = "Nothing"
