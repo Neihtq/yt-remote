@@ -1,5 +1,7 @@
-#What's that?
+# YT-Remote
+Name is not fix yet.
 
+## What's that?
 You might wanna play your music through your Hifi system or sth similar and want to control the music remotely since this is more convenient. Alexa and Google Home are great, but unfortunately they cannot play YouTube or Soundcloud. Afaik they also can't build up an individual queue which was created spontanously, only playlists.
 
 This might be a nice addition. You can connect the stationary machine (in my case a Raspberry Pi) which plays the music and can add Audio from YouTube and Soundcloud. If the Player is running a song, every additional Song will added to the queue.
@@ -20,7 +22,7 @@ These are necessary to fetch the meta data (title etc.) from youtube links
 ***youtube-dl*** 'pip install youtube-dl'
 
 
-###Set IP-address within network so other devices can acces the server
+### Set IP-address within network so other devices can acces the server
 Set `host` in `server.py` to public available IP address
 #### How to determine available IP address for the server
 Open a terminal and type in following commands (see under). Choose the interface which connects the device where the server is running to the internet.
