@@ -1,6 +1,6 @@
-##YT-Remote
+###YT-Remote
 
-##What's that?
+###What's that?
 You might wanna play your music through your Hifi system or sth similar and want to control the music remotely since this is more convenient. Alexa and Google Home are great, but unfortunately they cannot play YouTube or Soundcloud. Afaik they also can't build up an individual queue which was created spontanously, only playlists.
 
 This might be a nice addition. You can connect the stationary machine (in my case a Raspberry Pi) which plays the music and can add Audio from YouTube and Soundcloud. If the Player is running a song, every additional Song will added to the queue.
