@@ -1,9 +1,18 @@
+##YT-Remote
+##What's that?
+You might wanna play your music through your Hifi system or sth similar and want to control the music remotely since this is more convenient. Alexa and Google Home are great, but unfortunately they cannot play YouTube or Soundcloud. Afaik they also can't build up an individual queue which was created spontanously, only playlists.
+
+This might be a nice addition. You can connect the stationary machine (in my case a Raspberry Pi) which plays the music and can add Audio from YouTube and Soundcloud. If the Player is running a song, every additional Song will added to the queue.
+E.g. if you have guests, everyone can add (his/her recommended) music to the queue via the network. No matter which device.
+
+Clientside: Should be a webpage still (in development; current task/goal)
+Serverside: Plays the music via VLC player
 ### Prerequisites
-***Python3*** and ***python-pip***, should be also available for Windows
+***Python3***, ***python-pip*** and ***VLC Player*** should be also available for Windows
 ##### Arch Linux
-`sudo pacman -S python python-pip` 
+`sudo pacman -S python python-pip vlc` 
 ##### Rasperian (/ Debian), usually pre-installed:
-`sudo apt-get install python3 python-pip`
+`sudo apt-get install python3 python-pip vlc`
 #### Python Packages
 These are necessary to fetch the meta data (title etc.) from youtube links
 ***pafy*** `pip install pafy`
