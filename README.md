@@ -45,3 +45,16 @@ or
 `python3 server.py # If you're using Debian`
 
 (Dunno how on Windows)
+
+# TODOs
+## Client
+- Interface for sending the links and receiving queue and currently playing track
+- WebInterface, no app, just a website (.html)
+- preferrably in React, Django, RoR, etc. It jus should look cool/fancy!
+- As (progressive) single page webapp
+
+## Server
+- Play/Pause/Prev/Next Functions
+- (if possible) embed Spotify
+- Optimization: Making it as efficient and lightweight as possible!
+- Maybe: Only use one port!
