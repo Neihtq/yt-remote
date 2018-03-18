@@ -29,6 +29,7 @@ Open a terminal and type in following commands (see under). Choose the interface
 
 #### Demo / Example on getting an IP address
 ![Alt Text](https://github.com/nEihTfool2/yt-remote/blob/master/how-to-set-public-IP/preview.gif?raw=true)
+
 Since my machine is connected via WiFi, I am choosing the interface `wlo1` 
 For testing purposes, it is of course more convenient to use `localhost`instead.
 
