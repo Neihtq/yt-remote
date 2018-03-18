@@ -35,8 +35,11 @@ Since my machine is connected via WiFi, I am choosing the interface `wlo1`
 For testing purposes, it is of course more convenient to use `localhost`instead.
 
 After that, just run `server.py`:
+
 `python server.py # If you're using Arch`
+
 or
+
 `python3 server.py # If you're using Debian`
 
 (Dunno how on Windows)
