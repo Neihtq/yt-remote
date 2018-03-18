@@ -3,7 +3,7 @@ from threading import Thread
 from time import sleep
 import socket, sys, pafy, os, struct, traceback, pickle
 
-_host = 'localhost'
+_host = '192.168.2.242'
 txt = "Can't read title from soundcloud"
 
 def sendQueue(sock):
@@ -62,8 +62,7 @@ def runVLC():
 
 def createSocket(port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_name = socket.gethostbyname(_host)
-    server_address = (server_name, port)
+    server_address = (_host, port)
     print('starting up on {} port {}'.format(*server_address))
     sock.bind(server_address)
     sock.listen(5)
